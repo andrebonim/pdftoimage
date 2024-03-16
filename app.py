@@ -9,7 +9,9 @@ from flask import Flask
 app = Flask(__name__)
 #http://127.0.0.1:5000/aHR0cHMgLy9sb2NhbGhvc3QvcHVibGljL2luY2lsLnBkZg==
 #http://127.0.0.1:5000/aHR0cDovL2xvY2FsaG9zdC9wdWJsaWMvaW5jaWwucGRm
-#https://f2w-pdf2image.azurewebsites.net/
+#https://f2w-pdf2image.azurewebsites.net/aHR0cDovL2xvY2FsaG9zdC9wdWJsaWMvaW5jaWwucGRm
+#https://f2w-pdf2image.azurewebsites.net/aHR0cHM6Ly93d3cubGV4cGl0LmNvbS9zdG9yYWdlL2RkSDZXYUpZaXUucGRm
+#http://127.0.0.1:5000/aHR0cHM6Ly93d3cubGV4cGl0LmNvbS9zdG9yYWdlL2RkSDZXYUpZaXUucGRm
 # Caminho para o arquivo PDF
 
 # Diretório de saída para as imagens
@@ -17,20 +19,21 @@ output_dir = 'saida'
 
 @app.route('/<string:name>')
 def hello(name):    
-    response = requests.get(base64.b64decode(name))
-    images_base64 = []
-    # Verifique se a solicitação foi bem-sucedida
-    if response.status_code == 200:
-        # Defina o nome do arquivo para salvar
-        filename = generate_random_string(10)
+    return base64.b64decode(name)
+    # response = requests.get(base64.b64decode(name))
+    # images_base64 = []
+    # # Verifique se a solicitação foi bem-sucedida
+    # if response.status_code == 200:
+    #     # Defina o nome do arquivo para salvar
+    #     filename = generate_random_string(10)
         
-        # Salve o conteúdo do PDF em um arquivo local
-        with open(filename, 'wb') as file:
-            file.write(response.content)
+    #     # Salve o conteúdo do PDF em um arquivo local
+    #     with open(filename, 'wb') as file:
+    #         file.write(response.content)
 
-        images_base64 = pdf_to_images(filename, output_dir)
+    #     images_base64 = pdf_to_images(filename, output_dir)
 
-    return images_base64
+    # return images_base64
 
 if __name__ == '__main__':
     app.run()
