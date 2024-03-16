@@ -1,5 +1,4 @@
 importlib-metadata
 Flask
 requests
-fitz
 PyMuPDF
