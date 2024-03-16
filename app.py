@@ -15,7 +15,7 @@ app = Flask(__name__)
 # Caminho para o arquivo PDF
 
 # Diretório de saída para as imagens
-output_dir = 'saida'
+output_dir = ''
 
 @app.route('/<string:name>')
 def hello(name):        
@@ -45,7 +45,7 @@ def generate_random_string(length):
 def pdf_to_images(pdf_path, output_dir):
     images_base64 = []
     # Crie o diretório de saída se não existir
-    os.makedirs(output_dir, exist_ok=True)
+    #os.makedirs(output_dir, exist_ok=True)
 
     # Abra o arquivo PDF
     with fitz.open(pdf_path) as doc:
