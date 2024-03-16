@@ -1,9 +1,9 @@
-import os
-import fitz
-import requests
+# import os
+# import fitz
+# import requests
 import base64
-import random
-import string
+# import random
+# import string
 from flask import Flask
 
 app = Flask(__name__)
@@ -19,7 +19,10 @@ output_dir = 'saida'
 
 @app.route('/<string:name>')
 def hello(name):    
-    return base64.b64decode(name)
+    try:
+        return base64.b64decode(name)
+    except Exception as error:
+        return "An exception occurred:" + type(error).__name__
     # response = requests.get(base64.b64decode(name))
     # images_base64 = []
     # # Verifique se a solicitação foi bem-sucedida
@@ -38,41 +41,41 @@ def hello(name):
 if __name__ == '__main__':
     app.run()
 
-def generate_random_string(length):
-    letters = string.ascii_letters + string.digits
-    random_string = ''.join(random.choices(letters, k=length))
-    return random_string + '.pdf'
+# def generate_random_string(length):
+#     letters = string.ascii_letters + string.digits
+#     random_string = ''.join(random.choices(letters, k=length))
+#     return random_string + '.pdf'
 
-def pdf_to_images(pdf_path, output_dir):
-    images_base64 = []
-    # Crie o diretório de saída se não existir
-    os.makedirs(output_dir, exist_ok=True)
+# def pdf_to_images(pdf_path, output_dir):
+#     images_base64 = []
+#     # Crie o diretório de saída se não existir
+#     os.makedirs(output_dir, exist_ok=True)
 
-    # Abra o arquivo PDF
-    with fitz.open(pdf_path) as doc:
-        # Itere sobre cada página do PDF
-        for page_number in range(len(doc)):
-            # Renderize a página como uma imagem
-            page = doc[page_number]
-            pix = page.get_pixmap()
+#     # Abra o arquivo PDF
+#     with fitz.open(pdf_path) as doc:
+#         # Itere sobre cada página do PDF
+#         for page_number in range(len(doc)):
+#             # Renderize a página como uma imagem
+#             page = doc[page_number]
+#             pix = page.get_pixmap()
 
-            # Salve a imagem no diretório de saída
-            image_path = os.path.join(output_dir, f'{pdf_path}_page_{page_number+1}.png')
-            pix.save(image_path)
+#             # Salve a imagem no diretório de saída
+#             image_path = os.path.join(output_dir, f'{pdf_path}_page_{page_number+1}.png')
+#             pix.save(image_path)
 
-            # Converta a imagem em base64
-            with open(image_path, 'rb') as image_file:
-                image_data = image_file.read()
-                image_base64 = base64.b64encode(image_data).decode('utf-8')
-                images_base64.append(image_base64)
+#             # Converta a imagem em base64
+#             with open(image_path, 'rb') as image_file:
+#                 image_data = image_file.read()
+#                 image_base64 = base64.b64encode(image_data).decode('utf-8')
+#                 images_base64.append(image_base64)
 
-            # Exclua o arquivo de imagem
-            os.remove(image_path)
+#             # Exclua o arquivo de imagem
+#             os.remove(image_path)
     
-    os.remove(pdf_path)
-    return images_base64
+#     os.remove(pdf_path)
+#     return images_base64
 
 
 
-# Chame a função para converter o PDF em imagens
-#pdf_to_images(pdf_path, output_dir)
+# # Chame a função para converter o PDF em imagens
+# #pdf_to_images(pdf_path, output_dir)
