@@ -1,5 +1,5 @@
 importlib-metadata
 Flask
 requests
-fitz
 PyMuPDF==1.19.0
+fitz
