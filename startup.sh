@@ -9,4 +9,5 @@ apt-get install -y libtesseract-dev
 apt-get install -y tesseract-ocr-eng  # Inglês
 apt-get install -y tesseract-ocr-deu  # Alemão
 apt-get install -y tesseract-ocr-fra  # Francês
+apt-get install -y tesseract-ocr-por  # Português
 # Adicione mais comandos de instalação para outros idiomas conforme necessário
