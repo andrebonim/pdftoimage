@@ -1,4 +1,5 @@
 importlib-metadata
 Flask
 requests
-PyMuPDF
+PyPDF2
+pytesseract
