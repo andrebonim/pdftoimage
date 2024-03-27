@@ -44,49 +44,52 @@ def hello(name):
     return images_base64
 
 @app.route('/ocr/<string:name>')
-def ocr(name):            
-    response = requests.get(base64.b64decode(name))    
-    texto_imagem = []
-    # Verifique se a solicitação foi bem-sucedida
-    if response.status_code == 200:
+def ocr(name):      
+    try      
+        response = requests.get(base64.b64decode(name))    
+        texto_imagem = []
+        # Verifique se a solicitação foi bem-sucedida
+        if response.status_code == 200:
+            
+            # Defina o nome do arquivo para salvar
+            filename = generate_random_string(10,'pdf')
+            
+            # Salve o conteúdo do PDF em um arquivo local
+            with open(filename, 'wb') as file:
+                file.write(response.content)
+
+            # Abre o arquivo PDF        
+            doc = fitz.open(filename)
+            
+            # Itera sobre as páginas do PDF
+            for page_num in range(doc.page_count):
+                page = doc.load_page(page_num)
+                pix = page.get_pixmap()
+
+                textPage = page.get_text("text").strip()
+
+                if textPage:
+                    texto_imagem.append(('texto', textPage))
+
+                # Extrai imagens da página
+                images = page.get_images()
+
+                # Itera sobre as imagens
+                for i, img_info in enumerate(images):
+                    xref = img_info[0]
+                    base_image = doc.extract_image(xref)
+                    image = Image.open(io.BytesIO(base_image["image"]))
+
+                    # Aplica OCR na imagem                
+                    texto_imagem.append(('ocr', extract_text_from_image(image)))
+
+            # Fecha o arquivo PDF        
+            doc.close()
+            os.remove(filename)
         
-        # Defina o nome do arquivo para salvar
-        filename = generate_random_string(10,'pdf')
-        
-        # Salve o conteúdo do PDF em um arquivo local
-        with open(filename, 'wb') as file:
-            file.write(response.content)
-
-        # Abre o arquivo PDF        
-        doc = fitz.open(filename)
-        
-        # Itera sobre as páginas do PDF
-        for page_num in range(doc.page_count):
-            page = doc.load_page(page_num)
-            pix = page.get_pixmap()
-
-            textPage = page.get_text("text").strip()
-
-            if textPage:
-                texto_imagem.append(('texto', textPage))
-
-            # Extrai imagens da página
-            images = page.get_images()
-
-            # Itera sobre as imagens
-            for i, img_info in enumerate(images):
-                xref = img_info[0]
-                base_image = doc.extract_image(xref)
-                image = Image.open(io.BytesIO(base_image["image"]))
-
-                # Aplica OCR na imagem                
-                texto_imagem.append(('ocr', extract_text_from_image(image)))
-
-        # Fecha o arquivo PDF        
-        doc.close()
-        os.remove(filename)
-    
-    return texto_imagem
+        return texto_imagem
+    except Exception as error:
+        print("An error occurred:", error) # An error occurred: name 'x' is not defined
 
 if __name__ == '__main__':
     app.run()
