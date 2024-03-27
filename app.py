@@ -1,5 +1,5 @@
 import os
-import PyPDF2
+import io
 import fitz
 import codecs
 import requests
@@ -7,8 +7,8 @@ import base64
 import random
 import string
 import tempfile
+import PyPDF2
 import pytesseract
-import io
 from flask import Flask
 from io import BytesIO
 from PIL import Image
