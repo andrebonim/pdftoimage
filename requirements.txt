@@ -1,6 +1,4 @@
 importlib-metadata
 Flask
 requests
-PyPDF2
 pytesseract
-fitz
