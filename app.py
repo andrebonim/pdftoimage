@@ -45,7 +45,7 @@ def hello(name):
 
 @app.route('/ocr/<string:name>')
 def ocr(name):      
-    try      
+    try:      
         response = requests.get(base64.b64decode(name))    
         texto_imagem = []
         # Verifique se a solicitação foi bem-sucedida
